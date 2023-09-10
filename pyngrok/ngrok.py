@@ -7,10 +7,11 @@ import uuid
 from http import HTTPStatus
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
-from urllib.request import urlopen, Request
+from urllib.request import Request, urlopen
 
-from pyngrok import process, conf, installer
-from pyngrok.exception import PyngrokNgrokHTTPError, PyngrokNgrokURLError, PyngrokSecurityError, PyngrokError
+from pyngrok import conf, installer, process
+from pyngrok.exception import (PyngrokError, PyngrokNgrokHTTPError,
+                               PyngrokNgrokURLError, PyngrokSecurityError)
 
 __author__ = "Alex Laird"
 __copyright__ = "Copyright 2023, Alex Laird"
@@ -251,6 +252,10 @@ def connect(addr=None, proto=None, name=None, pyngrok_config=None, **options):
         "addr": addr,
         "proto": proto
     }
+
+    if "labels" in options:
+        config.pop("proto")
+
     options.update(config)
 
     # Upgrade legacy parameters, if present
