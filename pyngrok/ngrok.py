@@ -253,9 +253,6 @@ def connect(addr=None, proto=None, name=None, pyngrok_config=None, **options):
         "proto": proto
     }
 
-    if "labels" in options:
-        config.pop("proto")
-
     options.update(config)
 
     # Upgrade legacy parameters, if present
@@ -278,6 +275,10 @@ def connect(addr=None, proto=None, name=None, pyngrok_config=None, **options):
                 options["basic_auth"] = [auth]
 
             options.pop("auth")
+
+    if "labels" in options:
+        options.pop("proto")
+        options.pop("schemes")
 
     api_url = get_ngrok_process(pyngrok_config).api_url
 
